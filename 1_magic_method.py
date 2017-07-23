@@ -1,8 +1,3 @@
-"""
-写在前面:
-这一小节学习的是Python的特殊方法,Python提供了各种各样的特殊方法,使用这些方法可以实现自定义的类。
-
-"""
 import collections
 from random import choice
 
