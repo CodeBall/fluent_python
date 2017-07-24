@@ -41,7 +41,87 @@ def symbol2ascii_by_generator(symbols):
 symbol2ascii_by_generator("ABCDabcdEF")
 ```
 ## 切片
+### 为什么切片和区间会忽略最后一个元素
+这样做的好处有以下几点：
+
++ 当只有最后一个位置时，我们也可以快速看出切片和区间有多少个元素，比如`my_list[:5]`有5个元素
++ 当起止位置信息都可见的时候，我们可以快速计算出区间的长度，即后一个数减去第一个数
++ 可以让我们使用任意一个数把区间分成两个部分，比如`my_list[:x]`和`my_list[x:]`
+
+### 切片的使用方法
+可以使用`my_list[a:b]`的形式对序列进行基本的切片操作，也可以用`my_list[a:b:c]`的形式对列表my_list在a和b之间以c间隔进行取值，c的值也可以是负值，代表反向取值，如下所示：
+
+```python
+def split_for_object(object_ex):
+    print(object_ex)
+    print(object_ex[2:5])
+    print(object_ex[:4])
+    print(object_ex[::3])
+    print(object_ex[::-1])
+    print(object_ex[::-2])
+
+split_for_object("abcdefghijklmn")
+```
+程序运行的返回结果如下：
+
+```Python
+abcdefghijklmn
+cde
+abcd
+adgjm
+nmlkjihgfedcba
+nljhfdb
+```
+
 ## 序列的+和*
+
++可用于两个序列的拼接操作，*用于一个序列重复n次的操作，这两个运算符都不修改原有的序列，而是产生一个新的序列。示例如下所示：
+
+```python
+# 序列的+运算
+def do_add(a, b):
+    print(a + b)
+
+
+# 序列的*运算
+def do_mul(a, n):
+    print(a * n)
+
+do_add("hello ", "world!")
+do_mul("ABB-", 4)
+```
+
+*的运用有一个需要注意的地方，即在执行`a*n`的过程中，如果a中有元素是对其他可变对象的引用，则运算完成之后就得到n个同样的引用，修改一处则会有多处进行修改。比如下面这个示例：
+
+``` python
+def wrong_ex():
+    weird_board = [['_'] * 3] * 3
+    print(weird_board)
+    weird_board[0][2] = 'A'
+    print(weird_board)
+
+
+def right_ex():
+    weird_board = [['_'] * 3 for i in range(3)]
+    print(weird_board)
+    weird_board[0][2] = 'A'
+    print(weird_board)
+
+wrong_ex()
+right_ex()
+```
+
+上面示例的运行结果如下：
+
+```python
+[['_', '_', '_'], ['_', '_', '_'], ['_', '_', '_']]
+[['_', '_', 'A'], ['_', '_', 'A'], ['_', '_', 'A']]
+[['_', '_', '_'], ['_', '_', '_'], ['_', '_', '_']]
+[['_', '_', 'A'], ['_', '_', '_'], ['_', '_', '_']]
+
+```
+
+
 ## 序列的增量赋值
 ## list.sort() and sorted()
 
