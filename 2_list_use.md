@@ -123,5 +123,91 @@ right_ex()
 
 
 ## 序列的增量赋值
+### 就地加法
+增量赋值的写法就是类似于`a += b`的样子，+=背后用到的特殊方法是`__iadd__`，但是如果一个类没有实现这个方法，python就会退而求其次，使用`__add__`方法。这两个方法还是有根本的区别的：
+
++ `__iadd__`方法也称‘就地加法’，因为在做运算的时候，a会就地改动，效果就像`a.extend(b)`一样，不会出现新的对象。
++ `__add__`方法在做加法运算的时候，会先计算`a + b`，然后将结果存到一个新的对象中，再将这个对象赋值给a。
+
+需要注意的是，就地加法只能运用在可变序列中，不可变序列不会在原地进行修改。如下示例所示：
+
+```python
+# 就地加法在可变序列和不可变序列中的应用
+def iadd_ex():
+    a = [1, 2, 3]
+    b = (4, 5, 6)
+    c = [7, 8, 9]
+    d = (10, 11, 12)
+    print("id for a :{}".format(id(a)))
+    print("id for b :{}".format(id(b)))
+
+    a += c
+    b += d
+    print("id for a after run a += c : {}".format(id(a)))
+    print("id for b after run b += c : {}".format(id(b)))
+
+iadd_ex()
+```
+
+示例结果如下：
+
+```python
+id for a :4324181576
+id for b :4324140952
+id for a after run a += c : 4324181576
+id for b after run b += c : 4324209000
+```
+
+由此可见：对不可变序列进行重复拼接操作的话，效率会变得很低，因为解释其需要把原来对象中的元素拷贝到新的位置，然后在执行拼接操作。
+
+**注意，str作为不可变序列，重复操作时没有效率降低的说法，因为对str类型数据做+=操作太普遍，python就对其进行了优化，在申请空间时，程序会预留可扩展空间给str，因此不会涉及到复制的操作，而是直接执行拼接**
+
+### 就地乘法
+就地乘法的使用和就地加法很相似，只不过就地乘法用到而特殊方法是：`__imul__`
+
 ## list.sort() and sorted()
+
++ list.sort()方法是就地排序，执行完这个方法后，原对象有可能发生了变化，同时，这个方法也不会返回任何值。
++ sorted()方法做排序操作时，会新建一个列表作为返回值，这个方法可以接受任何形式的可迭代对象作为参数，也可以包括不可变对象和生成器，只是最后返回的都会是一个列表。
+
+list.sort()方法和sorted()方法虽然实现不同，但都有两个可选的关键字参数：
+
++ reverse： 指明最终序列是升序还是降序，这个参数的默认值是False，代表升序。
++ key： 一个只有一个参数的函数，这个函数会被用在序列里的每一个元素上，函数所产生的结果就是排序算法依赖的对比关键字。默认用元素自己的值来排序。
+
+```python
+# list.sort()方法和sorted()方法的使用
+def sort_and_sorted():
+    fruits = ['grape', 'watermelon', 'apple', 'banana']
+    # 通过下面两个输出可以证明sorted()方法不改变原来的序列
+    print(sorted(fruits))
+    print(fruits)
+
+    # 按照元素本身进行降序排序,这里就是字母顺序
+    print(sorted(fruits, reverse=True))
+
+    # 按照长度进行升序排序
+    print(sorted(fruits, key=len))
+
+    # 按照长度进行降序排序
+    print(sorted(fruits, key=len, reverse=True))
+
+    # 通过下面两个打印可以证明list.sort()方法是就地排序
+    print(fruits)
+    fruits.sort()
+    print(fruits)
+
+sort_and_sorted()
+```
+程序的运行结果如下：
+
+```python
+['apple', 'banana', 'grape', 'watermelon']
+['grape', 'watermelon', 'apple', 'banana']
+['watermelon', 'grape', 'banana', 'apple']
+['grape', 'apple', 'banana', 'watermelon']
+['watermelon', 'banana', 'grape', 'apple']
+['grape', 'watermelon', 'apple', 'banana']
+['apple', 'banana', 'grape', 'watermelon']
+```
 

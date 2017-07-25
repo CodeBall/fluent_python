@@ -49,10 +49,50 @@ def right_ex():
     print(weird_board)
 
 
+# 就地加法在可变序列和不可变序列中的应用
+def iadd_ex():
+    a = [1, 2, 3]
+    b = (4, 5, 6)
+    c = [7, 8, 9]
+    d = (10, 11, 12)
+    print("id for a :{}".format(id(a)))
+    print("id for b :{}".format(id(b)))
+
+    a += c
+    b += d
+    print("id for a after run a += c : {}".format(id(a)))
+    print("id for b after run b += c : {}".format(id(b)))
+
+
+# list.sort()方法和sorted()方法的使用
+def sort_and_sorted():
+    fruits = ['grape', 'watermelon', 'apple', 'banana']
+    # 通过下面两个输出可以证明sorted()方法不改变原来的序列
+    print(sorted(fruits))
+    print(fruits)
+
+    # 按照元素本身进行降序排序,这里就是字母顺序
+    print(sorted(fruits, reverse=True))
+
+    # 按照长度进行升序排序
+    print(sorted(fruits, key=len))
+
+    # 按照长度进行降序排序
+    print(sorted(fruits, key=len, reverse=True))
+
+    # 通过下面两个打印可以证明list.sort()方法是就地排序
+    print(fruits)
+    fruits.sort()
+    print(fruits)
+
+sort_and_sorted()
+
+
 # symbol2ascii("ABCDabcdEF")
 # symbol2ascii_by_generator("ABCDabcdEF")
 # split_for_object("abcdefghijklmn")
 # do_add("hello ", "world!")
 # do_mul("ABB-", 4)
-wrong_ex()
-right_ex()
+# wrong_ex()
+# right_ex()
+# iadd_ex()
